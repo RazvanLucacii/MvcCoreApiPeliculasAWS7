@@ -1,4 +1,5 @@
-﻿using MvcCoreApiPeliculasAWS7.Models;
+﻿using Microsoft.AspNetCore.DataProtection.KeyManagement;
+using MvcCoreApiPeliculasAWS7.Models;
 using Newtonsoft.Json;
 using System.Net.Http.Headers;
 
@@ -9,10 +10,9 @@ namespace MvcCoreApiPeliculasAWS7.Services
         private string UrlApi;
         private MediaTypeWithQualityHeaderValue header;
 
-        public ServiceApiPeliculas(IConfiguration configuration)
+        public ServiceApiPeliculas(KeysModel keys)
         {
-            this.UrlApi = configuration.GetValue<string>
-                ("ApiUrls:ApiPeliculasAWS");
+            this.UrlApi = keys.ApiPeliculas;
             this.header = new MediaTypeWithQualityHeaderValue
                 ("application/json");
         }
@@ -54,8 +54,7 @@ namespace MvcCoreApiPeliculasAWS7.Services
             return data;
         }
 
-        public async Task<Pelicula> 
-            FindPelicula(int id)
+        public async Task<Pelicula> FindPelicula(int id)
         {
             string request = "api/peliculas/" + id;
             Pelicula data =
